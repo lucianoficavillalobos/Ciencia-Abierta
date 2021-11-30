@@ -1,0 +1,28 @@
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+No   Variable         Label                                     Stats / Values          Freqs (% of Valid)   Graph             Valid      Missing  
+---- ---------------- ----------------------------------------- ----------------------- -------------------- ----------------- ---------- ---------
+1    SDemocracia      Satisfacción con la Democracia en Chile   Mean (sd) : 1.7 (0.9)   1 : 1369 (54.0%)     IIIIIIIIII        2535       0        
+     [numeric]                                                  min < med < max:        2 :  728 (28.7%)     IIIII             (100.0%)   (0.0%)   
+                                                                1 < 1 < 5               3 :  333 (13.1%)     II                                    
+                                                                IQR (CV) : 1 (0.5)      4 :   75 ( 3.0%)                                           
+                                                                                        5 :   30 ( 1.2%)                                           
+
+2    FPPolitica       Frecuencia de Participación Política      Mean (sd) : 1.7 (0.8)   24 distinct values   :                 2535       0        
+     [numeric]                                                  min < med < max:                             :                 (100.0%)   (0.0%)   
+                                                                1 < 1.4 < 5                                  :                                     
+                                                                IQR (CV) : 1 (0.5)                           : .                                   
+                                                                                                             : : : . .                             
+
+3    MSociales        Afiliación a Movimiento Social            Mean (sd) : 3.9 (0.5)   53 distinct values             :       2535       0        
+     [numeric]                                                  min < med < max:                                       :       (100.0%)   (0.0%)   
+                                                                1 < 3.9 < 5                                            :                           
+                                                                IQR (CV) : 0.5 (0.1)                                 . : .                         
+                                                                                                                   . : : : :                       
+
+4    CInstituciones   Confianza en Instituciones                Mean (sd) : 2.1 (0.6)   76 distinct values       :             2535       0        
+     [numeric]                                                  min < med < max:                                 :   .         (100.0%)   (0.0%)   
+                                                                1 < 2.1 < 4.3                                  . : . :                             
+                                                                IQR (CV) : 0.8 (0.3)                           : : : : :                           
+                                                                                                             : : : : : : . .                       
+---------------------------------------------------------------------------------------------------------------------------------------------------

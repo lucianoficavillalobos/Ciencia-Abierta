@@ -1,0 +1,9 @@
+$corr
+               SDemocracia FPPolitica  MSociales CInstituciones
+SDemocracia      1.0000000 -0.1282580 -0.1002150      0.4118433
+FPPolitica      -0.1282580  1.0000000  0.3239918     -0.1994723
+MSociales       -0.1002150  0.3239918  1.0000000     -0.1405587
+CInstituciones   0.4118433 -0.1994723 -0.1405587      1.0000000
+
+$corrPos
+

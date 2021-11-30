@@ -1,0 +1,164 @@
+# A. Código Preparación 
+
+## 1. Cargar librerías 
+```{r}
+library(pacman)
+p_load( dplyr,
+        stargazer, 
+        sjmisc, 
+        sjlabelled,
+        summarytools, 
+        knitr,
+        ggplot2,
+        sjPlot,
+        car,
+        kableExtra, 
+        sjPlot, 
+        sessioninfo,
+        install = T) 
+
+```
+
+## 2. Cargar datos
+```{r}
+load("../input/data/original/ELSOC_W04_v2.01_R(1).RData")
+View(elsoc_2019)
+
+# Ajustar espacio de trabajo
+options(scipen=999) # valores sin notación cientifica
+
+## Chequeo de la base de datos
+dim(elsoc_2019)
+View(elsoc_2019)
+```
+
+
+## 3. Seleccion de variables
+```{r}
+# Identificar variables de interes 
+
+find_var(data = elsoc_2019,"democracia") # Y
+freq(elsoc_2019$c01)
+
+find_var(data = elsoc_2019,"politica") # X  
+freq(elsoc_2019$c08_01)
+freq(elsoc_2019$c08_02)
+freq(elsoc_2019$c08_03)
+freq(elsoc_2019$c08_04)
+freq(elsoc_2019$c08_05)
+
+find_var(data = elsoc_2019,"movimiento") # X1
+# índice de filiación en movimientos sociales 
+freq (elsoc_2019)
+freq(elsoc_2019$c21_01)
+freq(elsoc_2019$c21_02)
+freq(elsoc_2019$c21_03)
+freq(elsoc_2019$c21_04)
+freq(elsoc_2019$c21_05)
+freq(elsoc_2019$c21_06)
+freq(elsoc_2019$c21_07)
+freq(elsoc_2019$c21_08)
+freq(elsoc_2019$c21_09)
+freq(elsoc_2019$c22)
+freq(elsoc_2019$c23)
+freq(elsoc_2019$c24)
+
+find_var(data = elsoc_2019,"confianza") # X2  
+# índice de confianza en las principales instituciones del país
+freq(elsoc_2019$c05_01)
+freq(elsoc_2019$c05_02)
+freq(elsoc_2019$c05_03)
+freq(elsoc_2019$c05_04)
+freq(elsoc_2019$c05_05)
+freq(elsoc_2019$c05_06)
+freq(elsoc_2019$c05_07)
+freq(elsoc_2019$c05_08)
+freq(elsoc_2019$c05_10)
+freq(elsoc_2019$c05_11)
+freq(elsoc_2019$c05_12)
+freq(elsoc_2019$c05_13)
+
+## Seleccion de variables 
+proc_elsoc <- elsoc_2019 %>% select(c01,
+                                    c08_01,
+                                    c08_02,
+                                    c08_03,
+                                    c08_04,
+                                    c08_05,
+                                    c21_01,
+                                    c21_02,
+                                    c21_03,
+                                    c21_04,
+                                    c21_05,
+                                    c21_06,
+                                    c21_07,
+                                    c21_08,
+                                    c05_01,
+                                    c05_02,
+                                    c05_03,
+                                    c05_04,
+                                    c05_05,
+                                    c05_06,
+                                    c05_07,
+                                    c05_08,
+                                    c05_10,
+                                    c05_11,
+                                    c05_12,
+                                    c05_13)
+
+
+## Obtener etiquetas de las variables 
+sjlabelled::get_label(proc_elsoc)
+```
+
+
+
+## 4. Procesamiento de variables ----
+
+```{r}
+## Recodificacion 
+proc_elsoc <- lapply(proc_elsoc[ ,1:26] , 
+                     FUN = function(x) recode(x, "NaN = NA;-888=NA;-999=NA"))
+proc_elsoc <- data.frame(proc_elsoc)
+
+## Creación de índices en base al promedio
+proc_elsoc <- proc_elsoc %>% rowwise() %>% mutate(media_politica = mean(c(c08_01, c08_02, c08_03, c08_04, c08_05), na.rm = T))
+proc_elsoc <- proc_elsoc %>% rowwise() %>% mutate(media_movimiento = mean(c(c21_01, c21_02, c21_03, c21_04, c21_05, c21_06, c21_07, c21_08), na.rm = T))
+proc_elsoc <- proc_elsoc %>% rowwise() %>% mutate(media_confianza = mean(c(c05_01, c05_02, c05_03, c05_04, c05_05, c05_06, c05_07, c05_08, c05_10, c05_11, c05_12, c05_13), na.rm = T))
+
+#Descriptivos de todas las variables proc_elsoc -> TABLA PUBLICABLE
+view(dfSummary(proc_elsoc, headings=FALSE))
+
+#Creacion nueva base de datos con solo las 4 variables (2 variables, 2 indices)
+proc_elsoc2 <- proc_elsoc %>% select("c01", "media_politica", "media_movimiento", "media_confianza", )
+
+#Descriptivos de las 4 variables proc_elsoc2 -> TABLA PUBLICABLE
+view(dfSummary(proc_elsoc2, headings=FALSE))
+
+## Etiquetado 
+proc_elsoc3 <- proc_elsoc2 %>% rename("SDemocracia" = c01, 
+                                      "FPPolitica" = media_politica,
+                                      "MSociales" = media_movimiento,
+                                      "CInstituciones" = media_confianza)
+
+proc_elsoc3$SDemocracia <- set_label(x = proc_elsoc3$SDemocracia,label = "Satisfacción con la Democracia en Chile")
+proc_elsoc3$FPPolitica <- set_label(x = proc_elsoc3$FPPolitica,label = "Frecuencia de Participación Política")
+proc_elsoc3$MSociales <- set_label(x = proc_elsoc3$MSociales,label = "Afiliación a Movimiento Social")
+proc_elsoc3$CInstituciones <- set_label(x = proc_elsoc3$CInstituciones,label = "Confianza en Instituciones")
+
+## Extraer NA de la base de datos
+proc_elsoc_original <-proc_elsoc # Respaldo base original
+sum(is.na(proc_elsoc3)) # Cantidad NA en la base
+proc_elsoc4 <-na.omit(proc_elsoc3) # Eliminar NA
+dim(proc_elsoc4) # Dimensión base posterior eliminación de NA
+view(dfSummary(proc_elsoc4, headings=FALSE)) 
+```
+
+
+# 5. Generacion de base de datos procesada para el analisis ----
+
+```{r}
+# Guardar base de datos
+
+save(proc_elsoc4,file = "../input/data/proc/PROC_ELSOC_TDR2.RData")
+```

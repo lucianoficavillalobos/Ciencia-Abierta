@@ -1,0 +1,103 @@
+# B. Código Análisis ----
+```{r}
+pacman::p_load(ggpubr, #graficos
+               dplyr, #manipulacion de datos
+               sjPlot, #tablas
+               corrplot, # matrices 
+               gridExtra, #unir graficos
+               texreg, #mostrar regresion multiple
+               summarytools, install = T)
+
+```
+## 1. Cargar Base de datos procesada
+```{r}
+load("../input/data/proc/PROC_ELSOC_TDR2.RData")
+```
+
+## 2. Estadísticos descriptivos ----
+```{r}
+sink("../output/tables/Tabla1.txt")
+Tabla_1 <- dfSummary(proc_elsoc4, headings=FALSE)
+Tabla_1
+
+sink()
+
+```
+
+
+## 3. Tabla de correlaciones ----
+```{r}
+sink("../output/tables/Tabla_cor.txt")
+cor.mtxplot <- corrplot.mixed(cor(select(proc_elsoc4, SDemocracia, FPPolitica, MSociales, CInstituciones)))
+cor.mtxplot
+sink()
+```
+
+
+## 4. Modelo regresion multiple----
+```{r}
+## Graficamos asociaciones
+
+#Grafico x1 
+graf.reg1 <- ggscatter(proc_elsoc4, x = "FPPolitica", y = "SDemocracia",
+                       shape = 21, size = 3, # Forma y tama?o de puntos
+                       add = "reg.line", #Agregar recta de regresion
+                       cor.coef = TRUE)# Agregar coeficiente correlacion
+graf.reg1
+ggsave("../output/graphs/grafico.reg1.png",
+       graf.reg1)
+
+#Grafico x2
+graf.reg2 <- ggscatter(proc_elsoc4, x = "MSociales", y = "SDemocracia",
+                       shape = 21, size = 3,
+                       add = "reg.line",
+                       cor.coef = TRUE)
+graf.reg2
+ggsave("../output/graphs/grafico.reg2.png",
+       graf.reg2)
+
+
+#Grafico x3 
+graf.reg3 <- ggscatter(proc_elsoc4, x = "CInstituciones", y = "SDemocracia",
+                       shape = 21, size = 3,
+                       add = "reg.line",
+                       cor.coef = TRUE)
+graf.reg3
+ggsave("../output/graphs/grafico.reg3.png", graf.reg3)
+
+graf.reg <- grid.arrange(graf.reg1, graf.reg2, graf.reg3, nrow = 1) # Unir graficos
+
+ggsave("../output/graphs/grafico.reg.png", graf.reg)
+```
+
+
+
+## ¿Como inciden FPPolitica, MSociales y CInstituciones conjuntamente sobre SDemocracia?
+
+## 4.1. Modelos de regresión simples y múltiples  ----
+```{r}
+rs.1 <-lm(SDemocracia ~ FPPolitica, data=proc_elsoc4)
+rs.2 <-lm(SDemocracia ~  MSociales, data=proc_elsoc4)
+rs.3 <-lm(SDemocracia ~  CInstituciones, data=proc_elsoc4)
+r.mult <- lm(SDemocracia ~ FPPolitica + MSociales + CInstituciones , data = proc_elsoc4)
+```
+
+```{r}
+
+Tabla_2 <- sjPlot::tab_model(list(rs.1, rs.2,rs.3, r.mult), show.ci=FALSE, p.style = "stars", dv.labels = c("Modelo 1", "Modelo 2", "Modelo 3", "Módelo Múltiple"),string.pred = "Predictores", string.est = "β")
+ Tabla_2
+```
+
+## 4.2. Control del modelo ----
+```{r}
+
+graf.control <- plot_model(r.mult, show.values = TRUE)+ theme_sjplot()
+
+ggsave("../output/graphs/graf.control.png", graf.control)
+
+graf.control
+```
+
+
+
+
