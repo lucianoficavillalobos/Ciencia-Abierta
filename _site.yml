@@ -7,7 +7,7 @@ navbar:
     href: index.html
   right:
   - icon: fa-envelope fa-lg
-    href: (aquí correo)
+    href: francisco.arevalo.a@ug.uchile.cl 
   - icon: fa-github fa-lg
     href: https://github.com/FranciscoArevalo28/Ciencia-Abierta
 output:
