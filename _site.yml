@@ -1,0 +1,16 @@
+name: "Entrega 3"
+output_dir: "."
+navbar:
+  title: "Participación política, confianza en instituciones y movimientos sociales explicando la satisfacción con la democracia en el Chile post estallido"
+  left:
+  - text: "Paper"
+    href: index.html
+  right:
+  - icon: fa-envelope fa-lg
+    href: (aquí correo)
+  - icon: fa-github fa-lg
+    href: http://repositorio-del-sitio
+output:
+  html_document:
+    theme: cerulean # yeti  spacelab simplex sandstone cosmo cerulean paper darkly flatly lumen readable
+    css: 'styles.css'

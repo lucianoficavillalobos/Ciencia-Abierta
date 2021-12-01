@@ -89,7 +89,7 @@ Correlacionar y analizar la Satisfacción con la democracia en relación con la 
 
 La base de datos utilizada corresponde al Estudio Longitudinal Social de Chile (ELSOC) del año 2019, elaborada por el Centro de Estudios de Conflicto y Cohesión Social (COES). La encuesta considera un total de 3417 personas encuestadas, y se levanta con el fin de “evaluar la manera cómo piensan, sienten y se comportan los chilenos en torno a un conjunto de temas referidos al conflicto y la cohesión social en Chile” [@noauthor_elsoc_nodate].
 ```{r echo=FALSE, results='hide'}
-load("../Ciencia abierta/input/data/original/ELSOC_W04_v2.01_R(1).RData")
+load("../Ciencia-abierta/input/data/original/ELSOC_W04_v2.01_R(1).RData")
 
 options(scipen=999)
 ```
