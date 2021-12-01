@@ -9,7 +9,7 @@ navbar:
   - icon: fa-envelope fa-lg
     href: (aquí correo)
   - icon: fa-github fa-lg
-    href: http://repositorio-del-sitio
+    href: https://github.com/FranciscoArevalo28/Ciencia-Abierta
 output:
   html_document:
     theme: cerulean # yeti  spacelab simplex sandstone cosmo cerulean paper darkly flatly lumen readable
